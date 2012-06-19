@@ -1,6 +1,6 @@
 = diverge
 
-Description goes here.
+http://rubygems.org/gems/diverge
 
 == Contributing to diverge
  
