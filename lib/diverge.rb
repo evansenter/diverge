@@ -18,7 +18,13 @@ class Diverge
   end
   
   def kullback_leibler(reverse = false)
-    (reverse ? q.zip(p) : p.zip(q)).inject(0.0) { |sum, (i, j)| sum + (i.zero? ? 0 : i * Math.log(safe_cast(i) / safe_cast(j))) }
+    (reverse ? q.zip(p) : p.zip(q)).inject(0.0) do |sum, (i, j)|
+      if i > 0 && j.zero?
+        raise ArgumentError.new("Kullback-Leibler is not defined when P(i) > 0 and Q(i) = 0")
+      end
+      
+      sum + (i.zero? ? 0 : i * Math.log(i / j))
+    end
   end
   
   alias :kl :kullback_leibler
@@ -28,11 +34,4 @@ class Diverge
   end
   
   alias :js :jensen_shannon
-  
-  private
-  
-  def safe_cast(value)
-    # Just to make sure we don't go crazy and to_f a Complex, for whatever insane reason that might come up, while still avoiding integer division
-    value.class < Integer ? value.to_f : value
-  end
 end
