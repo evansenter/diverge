@@ -39,5 +39,5 @@ class Diverge
     0.5 * p.zip(q).inject(0.0) { |sum, (i, j)| sum + ((i || 0) - (j || 0)).abs }
   end
   
-  alias :tvd, :total_variation_distance
+  alias :tvd :total_variation_distance
 end
