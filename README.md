@@ -2,18 +2,20 @@
 
 Diverge is a very simple class for calculating the Kullback–Leibler divergence or Jensen–Shannon divergence of two datasets. Example usage is as follows:
 
- 1.9.3p194 :001 > require "diverge"
- => true 
- 1.9.3p194 :002 > Diverge.new([0.25, 0.5, 0.25], [0.5, 0.3, 0.2]).kl
- => 0.1379119045715615 
- 1.9.3p194 :003 > Diverge.new([0.25, 0.5, 0.25], [0.5, 0.3, 0.2]).kl(:reverse)
- => 0.14869719288733346 
- 1.9.3p194 :004 > Diverge.new([0.5, 0.3, 0.2], [0.25, 0.5, 0.25]).kl
- => 0.14869719288733346 
- 1.9.3p194 :005 > Diverge.new([0.25, 0.5, 0.25], [0.5, 0.3, 0.2]).js
- => 0.14330454872944748 
- 1.9.3p194 :006 > Diverge.new([0.5, 0.3, 0.2], [0.25, 0.5, 0.25]).js
- => 0.14330454872944748
+    1.9.3p194 :001 > require "diverge"
+    => true 
+    1.9.3p194 :002 > Diverge.new([0.25, 0.5, 0.25], [0.5, 0.3, 0.2]).kl # Kullback-Leibler
+    => 0.1379119045715615 
+    1.9.3p194 :003 > Diverge.new([0.25, 0.5, 0.25], [0.5, 0.3, 0.2]).kl(:reverse)
+    => 0.14869719288733346 
+    1.9.3p194 :004 > Diverge.new([0.5, 0.3, 0.2], [0.25, 0.5, 0.25]).kl
+    => 0.14869719288733346 
+    1.9.3p194 :005 > Diverge.new([0.25, 0.5, 0.25], [0.5, 0.3, 0.2]).js # Jensen-Shannon
+    => 0.14330454872944748 
+    1.9.3p194 :006 > Diverge.new([0.5, 0.3, 0.2], [0.25, 0.5, 0.25]).js
+    => 0.14330454872944748
+    1.9.3p194 :006 > Diverge.new([0.5, 0.3, 0.2], [0.25, 0.5, 0.25]).corr # Pearson correlation
+    => -0.18898223650461368
 
 http://rubygems.org/gems/diverge
 
