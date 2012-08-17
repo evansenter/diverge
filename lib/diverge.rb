@@ -1,3 +1,5 @@
+require "gsl"
+
 class Diverge
   attr_reader :p, :q
   
@@ -40,4 +42,10 @@ class Diverge
   end
   
   alias :tvd :total_variation_distance
+  
+  def correlation
+    GSL::Stats::correlation(GSL::Vector.alloc(p), GSL::Vector.alloc(q))
+  end
+  
+  alias :corr :correlation
 end
