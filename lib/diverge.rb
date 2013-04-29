@@ -1,21 +1,27 @@
 require "gsl"
 
 class Diverge
+  class << self
+    attr_accessor :debug
+  end
+  
+  @debug = true
+  
   attr_reader :p, :q
   
   def initialize(p, q)
     @p, @q = p, q
     
     unless p.length == q.length
-      raise ArgumentError.new("The two discrete distributions must have the same number of elements") 
+      debugger { "The two discrete distributions must have the same number of elements" }
     end
     
     unless (p_sum = p.inject(&:+)) == 1
-      STDERR.puts("Warning: the first argument does not sum to 1, the sum is #{p_sum}")
+      debugger { "Warning: the first argument does not sum to 1, the sum is #{p_sum.inspect}" }
     end
     
     unless (q_sum = q.inject(&:+)) == 1
-      STDERR.puts("Warning: the second argument does not sum to 1, the sum is #{q_sum}")
+      debugger { "Warning: the second argument does not sum to 1, the sum is #{q_sum.inspect}" }
     end
   end
   
@@ -48,4 +54,18 @@ class Diverge
   end
   
   alias :corr :correlation
+  
+  def debug
+    self.class.debug
+  end
+  
+  def debug=(value)
+    self.class.debug = value
+  end
+  
+  private
+  
+  def debugger
+    STDERR.puts yield if debug
+  end
 end
