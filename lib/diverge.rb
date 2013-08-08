@@ -54,6 +54,16 @@ class Diverge
   end
   
   alias :corr :correlation
+
+  def spearman_correlation
+    p_ranks   = list_ranks(p)
+    q_ranks   = list_ranks(q)
+    d_squared = p.zip(q).map { |x, y| (p_ranks[x] - q_ranks[y]) ** 2 }
+
+    1 - ((6 * d_squared.inject(&:+)) / (size * (size ** 2 - 1)))
+  end
+
+  alias :s_corr :spearman_correlation
   
   def debug
     self.class.debug
@@ -64,6 +74,23 @@ class Diverge
   end
   
   private
+
+  def list_ranks(list)
+    uniq_list = list.sort.uniq
+    Hash[*
+      list.
+        sort.
+        each_with_index.
+        group_by { |x, i| x }.
+        values.
+        map { |a| a.map(&:first).zip([a.map(&:last).avg + 1] * a.length).uniq }.
+        flatten
+    ]
+  end
+
+  def size
+    p.length == q.length ? p.length : [p.length, q.length]
+  end
   
   def debugger
     STDERR.puts yield if debug
