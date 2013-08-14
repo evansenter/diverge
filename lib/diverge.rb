@@ -2,7 +2,19 @@ require "gsl"
 
 class Diverge
   class << self
-    attr_accessor :debug
+    attr_accessor :debug, :method_names
+
+    def method_added(name)
+      (@method_names ||= []) << name
+    end
+
+    def method_missing(name, *args, &block)
+      if (Diverge.public_instance_methods & Diverge.method_names).include?(name)
+        new(*args[0..1]).send(name, *args[2..-1])
+      else
+        super
+      end
+    end
   end
   
   @debug = true
