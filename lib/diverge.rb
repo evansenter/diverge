@@ -77,6 +77,12 @@ class Diverge
 
   alias :s_corr :spearman_correlation
   
+  def mean_square_error
+    p.zip(q).inject(0.0) { |sum, (i, j)| sum + (i - j) ** 2 } / size
+  end
+  
+  alias :mse :mean_square_error
+  
   def debug
     self.class.debug
   end
