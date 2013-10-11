@@ -1,5 +1,3 @@
-require "gsl"
-
 class Diverge
   class << self
     attr_accessor :debug, :method_names
@@ -62,7 +60,11 @@ class Diverge
   alias :tvd :total_variation_distance
   
   def correlation
-    GSL::Stats::correlation(GSL::Vector.alloc(p), GSL::Vector.alloc(q))
+    square = ->(x) { x ** 2 }
+    top    = size * p.zip(q).map { |x, y| x * y }.inject(&:+) - p.inject(&:+) * q.inject(&:+)
+    bottom = Math.sqrt((size * p.map(&square).inject(&:+) - p.inject(&:+) ** 2) * (size * q.map(&square).inject(&:+) - q.inject(&:+) ** 2))
+
+    bottom.zero? ? 0 : top / bottom
   end
   
   alias :corr :correlation
