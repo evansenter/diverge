@@ -68,11 +68,9 @@ class Diverge
   alias :corr :correlation
 
   def spearman_correlation
-    p_ranks   = list_ranks(p)
-    q_ranks   = list_ranks(q)
-    d_squared = p.zip(q).map { |x, y| (p_ranks[x] - q_ranks[y]) ** 2 }
+    sum_d_squared = list_ranks(p).zip(list_ranks(q)).inject(0.0) { |sum, (p_data, q_data)| sum + (p_data.rank_order - q_data.rank_order) ** 2 }
 
-    1 - ((6 * d_squared.inject(&:+)) / (size * (size ** 2 - 1)))
+    1 - ((6 * sum_d_squared) / (size * (size ** 2 - 1)))
   end
 
   alias :s_corr :spearman_correlation
@@ -94,16 +92,16 @@ class Diverge
   private
 
   def list_ranks(list)
-    uniq_list = list.sort.uniq
-    Hash[*
-      list.
-        sort.
-        each_with_index.
-        group_by { |x, i| x }.
-        values.
-        map { |a| a.map(&:first).zip([a.map(&:last).avg + 1] * a.length).uniq }.
-        flatten
-    ]
+    element = Struct.new(:value, :order, :rank_order)
+    list.
+      each_with_index.
+      map { |x, i| element.new(x, i, nil) }.
+      sort_by(&:value).
+      each_with_index.
+      group_by { |e, i| e.value }.
+      values.
+      inject([]) { |memo, a| memo + a.map(&:first).map { |e| e.tap { e.rank_order = a.map(&:last).avg + 1 } } }.
+      sort_by(&:order)
   end
 
   def size
