@@ -48,10 +48,20 @@ class Diverge
   alias :kl :kullback_leibler
   
   def jensen_shannon
-    0.5 * (kl + kl(:reverse))
+    m = p.zip(q).map { |p_i, q_i| 0.5 * (p_i + q_i) }
+    
+    silently do
+      0.5 * (Diverge.new(p, m).kl + Diverge.new(q, m).kl)
+    end
   end
   
   alias :js :jensen_shannon
+  
+  def j_divergence
+    0.5 * (kl + kl(:reverse))
+  end
+  
+  alias :j :j_divergence
   
   def total_variation_distance
     0.5 * p.zip(q).inject(0.0) { |sum, (i, j)| sum + (i - j).abs }
@@ -89,6 +99,12 @@ class Diverge
   
   def debug=(value)
     self.class.debug = value
+  end
+  
+  def silently(&block)
+    debug_value = debug
+    self.debug  = false
+    (yield block).tap { self.debug = debug_value }
   end
   
   private
