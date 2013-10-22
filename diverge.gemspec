@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name        = "diverge"
-  spec.version     = "1.5.1"
+  spec.version     = "1.5.2"
   spec.summary     = "Distribution divergences."
   spec.description = "A simple collection of functions for determining the divergence between two distributions."
   spec.authors     = ["Evan Senter"]
